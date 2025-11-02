@@ -13,9 +13,11 @@ A specialized DeepAgent that generates professional LaTeX research reports with 
 - Vector diagrams (EPS/SVG)
 - Hyperlink support
 - PDF compilation with pdflatex
-- **🆕 Multi-agent quality assurance system** for professional-grade outputs
-- **🆕 Iterative content review** with specialized grammar, LaTeX, and visual QA agents
-- **🆕 Quality scoring and automated refinement** before human handoff
+- Multi-agent quality assurance system for professional-grade outputs
+- Iterative content review with specialized grammar, LaTeX, and visual QA agents
+- Quality scoring and automated refinement before human handoff
+- File versioning and change tracking
+- Automated QA workflow orchestration
 
 ## Prerequisites
 
@@ -36,21 +38,21 @@ A specialized DeepAgent that generates professional LaTeX research reports with 
    docker-compose run --rm deepagent-scribe
    ```
 
-3. Inside the container, run the research agent:
+3. Inside the container, run the QA orchestrator for automated workflow:
    ```bash
-   python agents/research_agent/agent.py
+   python agents/qa_orchestrator/agent.py
    ```
 
-### Quality Assurance Workflow (🆕 Milestone 1)
-
-4. Run content quality review before LaTeX generation:
+   Or run individual agents:
    ```bash
+   # Content quality review
    python agents/content_editor/agent.py
-   ```
 
-5. View quality improvements:
-   ```bash
-   cat artifacts/quality_reports/content_review_report.md
+   # LaTeX generation
+   python agents/research_agent/agent.py
+
+   # LaTeX optimization
+   python agents/latex_specialist/agent.py
    ```
 
 ## Project Structure
@@ -58,18 +60,25 @@ A specialized DeepAgent that generates professional LaTeX research reports with 
 ```
 deepagent-scribe/
 ├── agents/
-│   ├── research_agent/       # Research agent implementation
-│   └── content_editor/       # 🆕 Content quality assurance agent
-├── tools/                     # Custom tools for the agent
+│   ├── research_agent/       # LaTeX report generation
+│   ├── content_editor/       # Content quality review and improvement
+│   ├── latex_specialist/     # LaTeX formatting and typography optimization
+│   └── qa_orchestrator/      # Multi-agent workflow coordination
+├── tools/                     # Custom tools and utilities
 │   ├── latex_generator.py    # LaTeX document generation
-│   └── pdf_compiler.py       # PDF compilation
+│   ├── pdf_compiler.py       # PDF compilation with pdflatex
+│   ├── visual_qa.py          # Visual quality analysis
+│   ├── visual_qa_agent.py    # Visual QA agent implementation
+│   ├── version_manager.py    # File versioning system
+│   └── change_tracker.py     # Content change tracking
 ├── artifacts/                 # Sample content and outputs
-│   ├── sample_content/       # Markdown and text content
-│   ├── reviewed_content/     # 🆕 LLM-improved content versions
-│   ├── quality_reports/      # 🆕 Quality analysis reports
-│   ├── images/               # JPG/PNG images
-│   ├── data/                 # CSV data files
+│   ├── sample_content/       # Source markdown, images, and CSV data
+│   ├── reviewed_content/     # LLM-improved content versions
+│   ├── quality_reports/      # Content quality analysis reports
+│   ├── qa_reports/           # QA orchestration reports
+│   ├── visual_qa/            # Visual quality analysis outputs
 │   └── output/               # Generated LaTeX and PDF files
+├── .deepagents/              # Persistent agent memory storage
 ├── Dockerfile
 ├── docker-compose.yml
 └── requirements.txt
@@ -77,52 +86,72 @@ deepagent-scribe/
 
 ## Usage
 
-### Standard Workflow
-The agent will generate LaTeX reports based on your research content, automatically handling:
-- Document structure and layout
-- Content conversion from markdown
-- Table and figure placement
-- Citation formatting
-- PDF compilation
+### Automated Workflow (Recommended)
 
-### Quality Assurance Workflow (🆕 Milestone 1)
+Run the QA orchestrator for a fully automated multi-agent workflow:
+
+```bash
+python agents/qa_orchestrator/agent.py
+```
+
+This orchestrates the complete pipeline:
+1. Content quality review and improvement (Content Editor)
+2. LaTeX document generation (Research Agent)
+3. LaTeX formatting optimization (LaTeX Specialist)
+4. Visual PDF quality analysis (Visual QA)
+5. Quality gate validation and reporting
+
+### Manual Workflow
+
+Run individual agents for granular control:
 
 **Step 1: Content Quality Review**
 ```bash
 python agents/content_editor/agent.py
 ```
-This will:
-- Review grammar, spelling, and readability
-- Improve sentence structure and flow
-- Generate quality scores and improvement reports
-- Save polished content to `artifacts/reviewed_content/`
+- Reviews grammar, spelling, and readability
+- Improves sentence structure and flow
+- Generates quality scores and improvement reports
+- Saves polished content to `artifacts/reviewed_content/`
 
-**Step 2: Generate LaTeX from Improved Content**
+**Step 2: Generate LaTeX Document**
 ```bash
 python agents/research_agent/agent.py
 ```
+- Converts markdown content to LaTeX
+- Creates tables from CSV data
+- Places images and figures
+- Handles citations and references
+- Compiles PDF with pdflatex
 
-**Quality Metrics:**
-- Grammar and spelling corrections
-- Readability improvements (Flesch Reading Ease)
-- Academic writing style optimization
-- Before/after quality scoring (0-100 scale)
+**Step 3: LaTeX Optimization**
+```bash
+python agents/latex_specialist/agent.py
+```
+- Optimizes LaTeX formatting and typography
+- Fixes compilation warnings and errors
+- Improves document structure
+- Ensures professional layout
 
-**Future Milestones:**
-- Milestone 2: File versioning and iteration tracking
-- Milestone 3: LaTeX specialist agent
-- Milestone 4: QA orchestration and automation
-- Milestone 5: Visual PDF quality analysis
+### Quality Metrics
 
-## Development Milestones
+The system tracks comprehensive quality metrics:
+- **Content**: Grammar, spelling, readability (Flesch Reading Ease)
+- **LaTeX**: Compilation success, warning count, formatting quality
+- **Visual**: Layout analysis, typography, figure quality
+- **Overall**: Before/after quality scoring (0-100 scale)
 
-- **✅ Milestone 1**: Content Editor Agent - Grammar, readability, and style improvements
-- **🔄 Milestone 2**: File Organization & Versioning - Track content iterations
-- **📋 Milestone 3**: LaTeX Specialist Agent - Typography and formatting optimization
-- **🔗 Milestone 4**: QA Orchestration - Automated multi-agent workflow
-- **👁️ Milestone 5**: Visual QA Agent - PDF layout and design validation
+## Multi-Agent Architecture
 
-See `MILESTONE_1_README.md` for detailed implementation guide.
+DeepAgent Scribe implements a sophisticated multi-agent system with specialized agents:
+
+- **Content Editor Agent**: Reviews and improves content quality (grammar, readability, style)
+- **Research Agent**: Generates LaTeX documents from markdown, CSV, and images
+- **LaTeX Specialist Agent**: Optimizes LaTeX formatting and typography
+- **QA Orchestrator**: Coordinates the complete workflow with quality gates
+- **Visual QA**: Analyzes PDF layout and design quality
+
+Each agent maintains persistent memory using the DeepAgents framework, allowing them to learn from previous iterations and improve over time.
 
 ## License
 
