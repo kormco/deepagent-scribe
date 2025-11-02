@@ -50,7 +50,7 @@ class LaTeXSpecialistAgent:
         self.change_tracker = ChangeTracker()
 
         # Paths
-        self.reports_dir = Path("artifacts/quality_reports")
+        self.reports_dir = Path("artifacts/agent_reports/quality")
         self.reports_dir.mkdir(parents=True, exist_ok=True)
 
         # Initialize memory

@@ -77,8 +77,9 @@ deepagent-scribe/
 ├── artifacts/                 # Sample content and outputs
 │   ├── sample_content/       # Source markdown, images, and CSV data
 │   ├── reviewed_content/     # LLM-improved content versions
-│   ├── quality_reports/      # Content quality analysis reports
-│   ├── qa_reports/           # QA orchestration reports
+│   ├── agent_reports/        # Agent execution reports
+│   │   ├── quality/          # Content & LaTeX quality processing reports
+│   │   └── orchestration/    # Multi-agent pipeline orchestration reports
 │   ├── visual_qa/            # Visual quality analysis outputs
 │   └── output/               # Generated LaTeX and PDF files
 ├── .deepagents/              # Persistent agent memory storage

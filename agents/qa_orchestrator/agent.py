@@ -49,7 +49,7 @@ class QAOrchestratorAgent:
         self.version_manager = VersionManager()
 
         # Paths
-        self.reports_dir = Path("artifacts/qa_reports")
+        self.reports_dir = Path("artifacts/agent_reports/orchestration")
         self.reports_dir.mkdir(parents=True, exist_ok=True)
 
         # Initialize memory

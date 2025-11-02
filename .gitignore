@@ -63,15 +63,14 @@ env/
 # Output files and directories (generated content)
 artifacts/output/*
 artifacts/visual_qa/*
-artifacts/quality_reports/*
 artifacts/reviewed_content/*
-artifacts/qa_reports/*
 artifacts/version_history/
+artifacts/agent_reports/*
 !artifacts/output/.gitkeep
 !artifacts/visual_qa/.gitkeep
-!artifacts/quality_reports/.gitkeep
 !artifacts/reviewed_content/.gitkeep
-!artifacts/qa_reports/.gitkeep
+!artifacts/agent_reports/quality/.gitkeep
+!artifacts/agent_reports/orchestration/.gitkeep
 
 # Keep input content
 !artifacts/sample_content/

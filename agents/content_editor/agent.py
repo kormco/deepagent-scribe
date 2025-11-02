@@ -44,7 +44,7 @@ class ContentEditorAgent:
         # Paths
         self.input_dir = Path("artifacts/sample_content")
         self.output_dir = Path("artifacts/reviewed_content/v1_content_edited")
-        self.reports_dir = Path("artifacts/quality_reports")
+        self.reports_dir = Path("artifacts/agent_reports/quality")
 
         # Ensure directories exist
         self.output_dir.mkdir(parents=True, exist_ok=True)
@@ -266,7 +266,7 @@ def main():
     print(f"Overall quality improvement: +{results['overall_quality_improvement']} points")
     print(f"Total issues fixed: {results['total_issues_fixed']}")
     print("\nReviewed content saved to: artifacts/reviewed_content/v1_content_edited/")
-    print("Quality report saved to: artifacts/quality_reports/")
+    print("Quality report saved to: artifacts/agent_reports/quality/")
 
 
 if __name__ == "__main__":
