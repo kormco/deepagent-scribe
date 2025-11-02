@@ -8,3 +8,4 @@ langchain-openai
 pandas
 pillow
 matplotlib
+python-dotenv

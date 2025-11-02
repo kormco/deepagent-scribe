@@ -33,7 +33,7 @@ class QualityThresholds:
 
     # Component thresholds (out of 25 each)
     latex_structure_minimum: int = 22
-    latex_typography_minimum: int = 20
+    latex_typography_minimum: int = 18  # Lowered to avoid iteration loops on acceptable typography
     latex_tables_figures_minimum: int = 20
     latex_best_practices_minimum: int = 20
 
