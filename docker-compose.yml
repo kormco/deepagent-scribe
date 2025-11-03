@@ -1,9 +1,9 @@
 version: '3.8'
 
 services:
-  deepagent-scribe:
+  deepagents-printshop:
     build: .
-    container_name: deepagent-scribe
+    container_name: deepagents-printshop
     volumes:
       - .:/app
       - deepagents-data:/app/.deepagents

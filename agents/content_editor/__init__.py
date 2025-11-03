@@ -1,1 +1,1 @@
-"""Content Editor Agent for DeepAgent Scribe."""
+"""Content Editor Agent for DeepAgents PrintShop."""

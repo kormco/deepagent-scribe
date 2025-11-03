@@ -1,6 +1,6 @@
-# DeepAgent Scribe - Intelligent LaTeX Research Report Generator
+# DeepAgents PrintShop - Intelligent LaTeX Document Generator
 
-An advanced multi-agent system that generates professional LaTeX research reports with comprehensive quality assurance, LLM-based document optimization, and automated visual quality analysis.
+An advanced multi-agent system that generates professional LaTeX documents with comprehensive quality assurance, LLM-based document optimization, and automated visual quality analysis.
 
 ## ⚠️ Important Notice
 
@@ -110,7 +110,7 @@ graph LR
 2. **Build and run the Docker container:**
    ```bash
    docker-compose build
-   docker-compose run --rm deepagent-scribe
+   docker-compose run --rm deepagents-printshop
    ```
 
 3. **Run the automated QA pipeline:**
@@ -121,7 +121,7 @@ graph LR
 ## Project Structure
 
 ```
-deepagent-scribe/
+deepagents-printshop/
 ├── agents/
 │   ├── research_agent/       # Author Agent: LaTeX document generation
 │   ├── content_editor/       # Grammar, readability, and style improvement

@@ -1,1 +1,1 @@
-"""Custom tools for the DeepAgent Scribe research agent."""
+"""Custom tools for the DeepAgents PrintShop document generation system."""

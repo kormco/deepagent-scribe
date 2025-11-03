@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-DeepAgent Scribe is a research agent that generates professional LaTeX research reports with comprehensive formatting, citations, tables, images, and diagrams. It uses the DeepAgents CLI framework and runs in Docker with TeX Live for PDF compilation.
+DeepAgents PrintShop is a document generation system that produces professional LaTeX documents with comprehensive formatting, citations, tables, images, and diagrams. It uses the DeepAgents CLI framework and runs in Docker with TeX Live for PDF compilation.
 
 ## Common Commands
 
@@ -12,23 +12,23 @@ DeepAgent Scribe is a research agent that generates professional LaTeX research 
 ```bash
 # Build and run Docker container
 docker-compose build
-docker-compose run --rm deepagent-scribe
+docker-compose run --rm deepagents-printshop
 
 # Run the research agent interactively
-docker-compose run --rm deepagent-scribe python agents/research_agent/agent.py
+docker-compose run --rm deepagents-printshop python agents/research_agent/agent.py
 
 # Run agent with direct generation
-docker-compose run --rm deepagent-scribe python agents/research_agent/agent.py generate
+docker-compose run --rm deepagents-printshop python agents/research_agent/agent.py generate
 
 # Use convenience script
-docker-compose run --rm deepagent-scribe bash run_agent.sh generate
+docker-compose run --rm deepagents-printshop bash run_agent.sh generate
 
 # Quality Assurance Workflow (Milestone 1+)
-docker-compose run --rm deepagent-scribe python agents/content_editor/agent.py
-docker-compose run --rm deepagent-scribe cat artifacts/agent_reports/quality/content_review_report.md
+docker-compose run --rm deepagents-printshop python agents/content_editor/agent.py
+docker-compose run --rm deepagents-printshop cat artifacts/agent_reports/quality/content_review_report.md
 
 # Access container shell
-docker-compose run --rm deepagent-scribe bash
+docker-compose run --rm deepagents-printshop bash
 ```
 
 ### LaTeX/PDF Operations
@@ -52,14 +52,14 @@ No formal test suite exists. Validation is done by:
 ### Quality Assurance Testing (Milestone 1+)
 ```bash
 # Test content editor agent
-docker-compose run --rm deepagent-scribe python agents/content_editor/simple_test.py
+docker-compose run --rm deepagents-printshop python agents/content_editor/simple_test.py
 
 # Run full content quality review
-docker-compose run --rm deepagent-scribe python agents/content_editor/agent.py
+docker-compose run --rm deepagents-printshop python agents/content_editor/agent.py
 
 # Check quality improvements
-docker-compose run --rm deepagent-scribe ls -la artifacts/reviewed_content/
-docker-compose run --rm deepagent-scribe cat artifacts/agent_reports/quality/content_review_report.md
+docker-compose run --rm deepagents-printshop ls -la artifacts/reviewed_content/
+docker-compose run --rm deepagents-printshop cat artifacts/agent_reports/quality/content_review_report.md
 ```
 
 ## Architecture

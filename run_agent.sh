@@ -1,7 +1,7 @@
 #!/bin/bash
-# Run the DeepAgent Scribe research agent
+# Run the DeepAgents PrintShop Author Agent
 
-echo "Starting DeepAgent Scribe Research Agent..."
+echo "Starting DeepAgents PrintShop Author Agent..."
 echo ""
 
 # Navigate to the agents directory

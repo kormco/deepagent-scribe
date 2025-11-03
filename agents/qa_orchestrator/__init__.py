@@ -1,1 +1,1 @@
-"""QA Orchestrator Agent for DeepAgent Scribe."""
+"""QA Orchestrator Agent for DeepAgents PrintShop."""

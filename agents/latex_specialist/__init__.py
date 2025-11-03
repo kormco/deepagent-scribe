@@ -1,1 +1,1 @@
-"""LaTeX Specialist Agent for DeepAgent Scribe."""
+"""LaTeX Specialist Agent for DeepAgents PrintShop."""
