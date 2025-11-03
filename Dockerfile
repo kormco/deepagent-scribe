@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
     texlive-science \
     ghostscript \
     imagemagick \
+    poppler-utils \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory

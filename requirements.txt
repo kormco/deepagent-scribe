@@ -9,3 +9,5 @@ pandas
 pillow
 matplotlib
 python-dotenv
+pdf2image
+pypdf

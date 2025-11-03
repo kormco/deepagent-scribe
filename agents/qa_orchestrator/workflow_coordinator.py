@@ -1,5 +1,5 @@
 """
-Workflow Coordinator - Milestone 4
+Workflow Coordinator
 
 Coordinates multi-agent workflows with intelligent sequencing and handoff logic.
 """
@@ -25,6 +25,7 @@ class AgentType(Enum):
     """Available agent types."""
     CONTENT_EDITOR = "content_editor"
     LATEX_SPECIALIST = "latex_specialist"
+    VISUAL_QA = "visual_qa"
 
 
 class WorkflowStage(Enum):
@@ -308,6 +309,12 @@ class WorkflowCoordinator:
                     assessment.latex_tables_figures = latex_analysis.get("tables_figures_score")
                     assessment.latex_best_practices = latex_analysis.get("best_practices_score")
 
+            elif agent_result.agent_type == AgentType.VISUAL_QA and agent_result.success:
+                # Include Visual QA score if available
+                if agent_result.quality_score is not None:
+                    assessment.visual_qa_score = float(agent_result.quality_score)
+                assessment.visual_qa_issues = agent_result.issues_found
+
         return assessment
 
     def determine_next_action(self, workflow: WorkflowExecution, quality_evaluation: QualityGateEvaluation) -> Tuple[WorkflowStage, str]:
@@ -400,18 +407,33 @@ class WorkflowCoordinator:
                 # Run Visual QA analysis on the generated PDF
                 print("👁️ Executing Visual QA Analysis")
 
-                # Visual QA doesn't modify content, just analyzes the PDF
+                # Visual QA analyzes and potentially improves the PDF
                 # The PDF should be at artifacts/output/research_report.pdf
                 pdf_path = "artifacts/output/research_report.pdf"
 
-                # Create a simple agent result for Visual QA
-                from tools.visual_qa import VisualQAAgent
-                visual_qa = VisualQAAgent()
+                # Use Visual QA Feedback Agent for analysis and improvements
+                import sys
+                sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'visual_qa'))
+                from agent import VisualQAFeedbackAgent
+
+                visual_qa_feedback = VisualQAFeedbackAgent()
 
                 try:
                     if os.path.exists(pdf_path):
-                        qa_results = visual_qa.validate_pdf_visual_quality(pdf_path)
+                        # Run iterative improvement process (max 2 iterations to avoid over-processing)
+                        final_pdf, improvements, final_version = visual_qa_feedback.analyze_and_improve(pdf_path, max_iterations=2)
+
+                        # Get final score
+                        from tools.visual_qa import VisualQAAgent
+                        visual_qa = VisualQAAgent()
+                        qa_results = visual_qa.validate_pdf_visual_quality(final_pdf)
+
                         print(f"✅ Visual QA Score: {qa_results.overall_score:.1f}/100")
+                        if improvements:
+                            print(f"🔧 Applied {len(improvements)} improvements")
+                        if final_version:
+                            print(f"📦 Final Version: {final_version}")
+                            workflow.final_version = final_version  # Update workflow with the actual version created
 
                         # Collect all issues from page results
                         all_issues = []
@@ -419,19 +441,19 @@ class WorkflowCoordinator:
                             all_issues.extend(page_result.issues_found)
 
                         agent_result = AgentResult(
-                            agent_type=AgentType.LATEX_SPECIALIST,  # Reuse for now
+                            agent_type=AgentType.VISUAL_QA,
                             success=True,
-                            version_created=workflow.final_version,
+                            version_created=final_version if final_version else workflow.final_version,
                             quality_score=qa_results.overall_score,
                             processing_time=0.0,
                             issues_found=all_issues[:5],  # Limit to first 5
-                            optimizations_applied=[],
+                            optimizations_applied=improvements,
                             error_message=None
                         )
                     else:
                         print(f"⚠️ PDF not found at {pdf_path}, skipping Visual QA")
                         agent_result = AgentResult(
-                            agent_type=AgentType.LATEX_SPECIALIST,
+                            agent_type=AgentType.VISUAL_QA,
                             success=True,
                             version_created=workflow.final_version,
                             quality_score=None,  # Don't affect overall score if skipped
@@ -443,7 +465,7 @@ class WorkflowCoordinator:
                 except Exception as e:
                     print(f"⚠️ Visual QA error: {e}")
                     agent_result = AgentResult(
-                        agent_type=AgentType.LATEX_SPECIALIST,
+                        agent_type=AgentType.VISUAL_QA,
                         success=True,
                         version_created=workflow.final_version,
                         quality_score=None,  # Don't affect overall score if failed

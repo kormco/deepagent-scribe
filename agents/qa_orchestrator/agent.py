@@ -1,5 +1,5 @@
 """
-QA Orchestrator Agent - Milestone 4
+QA Orchestrator Agent
 
 Master orchestration agent that coordinates all specialized QA agents in an automated pipeline
 with quality gates, decision logic, and iterative improvement workflows.
@@ -270,7 +270,7 @@ class QAOrchestratorAgent:
             "pipeline_metadata": {
                 "workflow_id": workflow.workflow_id,
                 "execution_timestamp": workflow.start_time,
-                "orchestrator_version": "milestone_4",
+                "orchestrator_version": "1.0",
                 "pipeline_duration": workflow.total_processing_time
             },
             "workflow_execution": workflow_summary,
@@ -465,7 +465,7 @@ class QAOrchestratorAgent:
 
 def main():
     """Run the QA orchestrator agent."""
-    print("🎯 Starting QA Orchestrator Agent - Milestone 4")
+    print("🎯 Starting QA Orchestrator Agent")
     print("=" * 70)
 
     # Initialize agent
@@ -475,11 +475,11 @@ def main():
         # Run complete QA pipeline
         results = agent.orchestrate_qa_pipeline(
             starting_version="v0_original",
-            workflow_id="milestone_4_demo"
+            workflow_id="qa_pipeline"
         )
 
         print("\n" + "=" * 70)
-        print("✅ MILESTONE 4: QA Orchestration complete!")
+        print("✅ QA Orchestration complete!")
 
     except Exception as e:
         print(f"❌ Error: {e}")

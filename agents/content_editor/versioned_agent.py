@@ -48,7 +48,7 @@ class VersionedContentEditorAgent:
 
         # Paths
         self.input_dir = Path("artifacts/sample_content")
-        self.reports_dir = Path("artifacts/quality_reports")
+        self.reports_dir = Path("artifacts/agent_reports/quality")
 
         # Ensure directories exist
         self.reports_dir.mkdir(parents=True, exist_ok=True)

@@ -175,8 +175,15 @@ Analyze this title page image for a research document. Evaluate the following as
 1. **Title Visibility** (1-10): Is the document title clearly visible, properly sized, and well-positioned?
 2. **Author Information** (1-10): Is the author name present and appropriately placed?
 3. **Date Information** (1-10): Is the date shown and properly formatted?
-4. **Layout Quality** (1-10): Is the content centered and professionally arranged?
+4. **Layout Quality** (1-10): Is the content centered and professionally arranged? Are borders or diagrams overlapping?
 5. **Typography** (1-10): Are fonts appropriate, consistent, and readable?
+
+**CRITICAL CHECK - LaTeX Syntax Detection:**
+⚠️ **RED FLAG**: Check if any LaTeX code or commands are visible in the rendered PDF (e.g., \\textbf{}, \\section{}, \\begin{}, \\usepackage{}, etc.).
+- If ANY LaTeX syntax is visible in the output, this is a CRITICAL FAILURE
+- The PDF should show formatted text, not raw LaTeX commands
+- Score must be reduced to 1/10 if LaTeX syntax is detected
+- Add "CRITICAL: Visible LaTeX syntax detected" to issues_found
 
 Also identify:
 - Any missing elements that should be present
@@ -208,6 +215,13 @@ Examine this table of contents page. Evaluate these aspects with scores (1-10):
 4. **Hierarchy** (1-10): Is the section hierarchy clear with proper indentation?
 5. **Formatting** (1-10): Is the overall formatting clean and professional?
 
+**CRITICAL CHECK - LaTeX Syntax Detection:**
+⚠️ **RED FLAG**: Check if any LaTeX code or commands are visible in the rendered PDF (e.g., \\textbf{}, \\section{}, \\begin{}, \\usepackage{}, etc.).
+- If ANY LaTeX syntax is visible in the output, this is a CRITICAL FAILURE
+- The PDF should show formatted text, not raw LaTeX commands
+- Score must be reduced to 1/10 if LaTeX syntax is detected
+- Add "CRITICAL: Visible LaTeX syntax detected" to issues_found
+
 Identify:
 - Missing or malformed elements
 - Alignment and spacing issues
@@ -237,6 +251,13 @@ Analyze this content page for visual quality. Score these elements (1-10):
 3. **Text Layout** (1-10): Are margins, spacing, and text flow appropriate?
 4. **Typography** (1-10): Are fonts consistent, readable, and properly sized?
 5. **Content Elements** (1-10): Are tables, figures, or other elements well-formatted?
+
+**CRITICAL CHECK - LaTeX Syntax Detection:**
+⚠️ **RED FLAG**: Check if any LaTeX code or commands are visible in the rendered PDF (e.g., \\textbf{}, \\section{}, \\begin{}, \\usepackage{}, \\cite{}, \\ref{}, etc.).
+- If ANY LaTeX syntax is visible in the output, this is a CRITICAL FAILURE
+- The PDF should show formatted text, not raw LaTeX commands
+- Score must be reduced to 1/10 if LaTeX syntax is detected
+- Add "CRITICAL: Visible LaTeX syntax detected" to issues_found
 
 Look for:
 - Inconsistent formatting
@@ -395,7 +416,7 @@ class VisualQAAgent:
         self.llm_analyzer = MultimodalLLMAnalyzer(api_key)
 
         # Create output directory for images
-        self.output_dir = Path("artifacts/visual_qa")
+        self.output_dir = Path("artifacts/reviewed_content/v3_visual_qa")
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     def validate_pdf_visual_quality(self, pdf_path: str) -> DocumentVisualQA:

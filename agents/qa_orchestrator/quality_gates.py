@@ -1,5 +1,5 @@
 """
-Quality Gates System - Milestone 4
+Quality Gates System
 
 Manages quality thresholds, decision logic, and escalation rules for the QA pipeline.
 """
@@ -60,9 +60,11 @@ class QualityAssessment:
     latex_typography: Optional[int] = None
     latex_tables_figures: Optional[int] = None
     latex_best_practices: Optional[int] = None
+    visual_qa_score: Optional[float] = None
 
     content_issues: List[str] = None
     latex_issues: List[str] = None
+    visual_qa_issues: List[str] = None
 
     overall_score: Optional[float] = None
     assessment_timestamp: str = None
@@ -72,6 +74,8 @@ class QualityAssessment:
             self.content_issues = []
         if self.latex_issues is None:
             self.latex_issues = []
+        if self.visual_qa_issues is None:
+            self.visual_qa_issues = []
         if self.assessment_timestamp is None:
             self.assessment_timestamp = datetime.now().isoformat()
 
@@ -314,6 +318,8 @@ class QualityGateManager:
             scores.append(assessment.content_score)
         if assessment.latex_score is not None:
             scores.append(assessment.latex_score)
+        if assessment.visual_qa_score is not None:
+            scores.append(assessment.visual_qa_score)
 
         if not scores:
             return QualityGateEvaluation(
@@ -451,6 +457,11 @@ class QualityGateManager:
                 "best_practices": assessment.latex_best_practices,
                 "issues_count": len(assessment.latex_issues),
                 "issues": assessment.latex_issues[:5]  # Limit to first 5
+            },
+            "visual_qa_analysis": {
+                "score": assessment.visual_qa_score,
+                "issues_count": len(assessment.visual_qa_issues),
+                "issues": assessment.visual_qa_issues[:5]  # Limit to first 5
             },
             "quality_gates": {
                 "content_passes": assessment.content_score >= self.thresholds.content_minimum if assessment.content_score else False,

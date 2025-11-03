@@ -25,7 +25,7 @@ docker-compose run --rm deepagent-scribe bash run_agent.sh generate
 
 # Quality Assurance Workflow (Milestone 1+)
 docker-compose run --rm deepagent-scribe python agents/content_editor/agent.py
-docker-compose run --rm deepagent-scribe cat artifacts/quality_reports/content_review_report.md
+docker-compose run --rm deepagent-scribe cat artifacts/agent_reports/quality/content_review_report.md
 
 # Access container shell
 docker-compose run --rm deepagent-scribe bash
@@ -59,7 +59,7 @@ docker-compose run --rm deepagent-scribe python agents/content_editor/agent.py
 
 # Check quality improvements
 docker-compose run --rm deepagent-scribe ls -la artifacts/reviewed_content/
-docker-compose run --rm deepagent-scribe cat artifacts/quality_reports/content_review_report.md
+docker-compose run --rm deepagent-scribe cat artifacts/agent_reports/quality/content_review_report.md
 ```
 
 ## Architecture
@@ -93,7 +93,7 @@ docker-compose run --rm deepagent-scribe cat artifacts/quality_reports/content_r
 2. ContentReviewer analyzes grammar, readability, and style
 3. Claude API improves content quality and fixes issues
 4. Improved content saved to `artifacts/reviewed_content/v1_content_edited/`
-5. Quality reports generated in `artifacts/quality_reports/`
+5. Quality reports generated in `artifacts/agent_reports/quality/`
 6. ResearchAgent uses improved content for LaTeX generation
 
 ### Memory System
