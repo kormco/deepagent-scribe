@@ -37,77 +37,60 @@ By using this software, you acknowledge these risks and agree to conduct appropr
 ## System Architecture
 
 ```mermaid
-graph TB
-    subgraph "Inputs"
-        MD[Markdown Content]
-        CSV[CSV Data Tables]
-        IMG[Images & Diagrams]
-    end
+graph LR
+    %% Inputs
+    IN_MD[📄 Markdown<br/>Content]
+    IN_CSV[📊 CSV Data<br/>Tables]
+    IN_IMG[🖼️ Images &<br/>Diagrams]
 
-    subgraph "QA Pipeline"
-        O[QA Orchestrator]
+    %% Agent Pipeline
+    A1[Content Editor<br/>Agent<br/>📝]
+    A2[Author Agent<br/>LaTeX Generator<br/>📄]
+    A3[LaTeX Specialist<br/>Agent<br/>✨]
+    A4[Visual QA<br/>Agent<br/>👁️]
 
-        subgraph "Stage 1: Content Review"
-            CE[Content Editor Agent]
-            CR[Grammar & Readability Check]
-        end
+    %% Orchestration
+    ORCH{QA Orchestrator<br/>🎯}
+    GATE{Quality Gates<br/>✅}
 
-        subgraph "Stage 2: LaTeX Generation"
-            LG[LLM LaTeX Generator]
-            RA[Research Agent]
-        end
+    %% Outputs
+    OUT_PDF[📑 Final PDF<br/>90+ Quality Score]
+    OUT_VER[📦 Version History<br/>Full Change Tracking]
+    OUT_IMG[🖼️ Visual QA<br/>Screenshots]
+    OUT_REP[📊 Quality<br/>Reports]
 
-        subgraph "Stage 3: LaTeX Optimization"
-            LS[LaTeX Specialist Agent]
-            LO[Typography & Formatting]
-        end
+    %% Main flow
+    IN_MD --> A1
+    IN_CSV --> A2
+    IN_IMG --> A2
 
-        subgraph "Stage 4: Visual QA"
-            VQA[Visual QA Agent]
-            PDF2IMG[PDF to Images]
-            VIS[Claude Vision Analysis]
-        end
+    A1 -->|v1_content_edited| GATE
+    GATE -->|Pass| A2
+    A2 -->|v2_latex_optimized<br/>+ PDF| GATE
+    GATE -->|Pass| A3
+    A3 -->|Improved LaTeX| GATE
+    GATE -->|Pass| A4
 
-        QG[Quality Gates]
-    end
+    %% Iteration loop
+    A4 -->|Issues Found<br/>Iteration 1-2| A2
+    A4 -.->|Score 90+| OUT_PDF
 
-    subgraph "Outputs"
-        PDF[Final PDF]
-        VH[Version History]
-        SS[Visual QA Screenshots]
-        REP[Quality Reports]
-    end
+    %% Orchestration
+    ORCH -.->|Coordinates| A1
+    ORCH -.->|Coordinates| A2
+    ORCH -.->|Coordinates| A3
+    ORCH -.->|Coordinates| A4
+    ORCH -.->|Validates| GATE
 
-    MD --> CE
-    CSV --> RA
-    IMG --> RA
+    %% Outputs
+    A2 --> OUT_VER
+    A4 --> OUT_IMG
+    ORCH --> OUT_REP
 
-    CE -->|v1_content_edited| RA
-    RA -->|LaTeX + PDF| LS
-    LS -->|v2_latex_optimized| VQA
-
-    VQA --> PDF2IMG
-    PDF2IMG --> VIS
-    VIS -->|Issues Found| LG
-    LG -->|Self-Corrected LaTeX| RA
-
-    O -.->|Coordinates| CE
-    O -.->|Coordinates| RA
-    O -.->|Coordinates| LS
-    O -.->|Coordinates| VQA
-
-    QG -.->|Validates| CE
-    QG -.->|Validates| LS
-    QG -.->|Validates| VQA
-
-    VQA --> PDF
-    RA --> VH
-    VQA --> SS
-    O --> REP
-
-    style O fill:#f9f,stroke:#333,stroke-width:4px
-    style LG fill:#ff9,stroke:#333,stroke-width:2px
-    style QG fill:#9ff,stroke:#333,stroke-width:2px
+    style ORCH fill:#f9f,stroke:#333,stroke-width:3px
+    style GATE fill:#9ff,stroke:#333,stroke-width:3px
+    style A2 fill:#ff9,stroke:#333,stroke-width:2px
+    style A4 fill:#9f9,stroke:#333,stroke-width:2px
 ```
 
 ## Quick Start
@@ -140,7 +123,7 @@ graph TB
 ```
 deepagent-scribe/
 ├── agents/
-│   ├── research_agent/       # LaTeX report generation from content
+│   ├── research_agent/       # Author Agent: LaTeX document generation
 │   ├── content_editor/       # Grammar, readability, and style improvement
 │   ├── latex_specialist/     # LaTeX formatting and typography optimization
 │   ├── visual_qa/            # Visual PDF quality analysis with LLM feedback
@@ -193,7 +176,7 @@ python agents/qa_orchestrator/agent.py
    - Style consistency
    - Quality scoring (0-100)
 
-2. **LaTeX Generation** (Research Agent + LLM Generator)
+2. **LaTeX Generation** (Author Agent + LLM Generator)
    - Markdown to LaTeX conversion
    - Table generation from CSV
    - Image and figure placement
@@ -338,7 +321,7 @@ For granular control, run individual agents:
 python agents/content_editor/agent.py
 ```
 
-**LaTeX Generation:**
+**LaTeX Generation (Author Agent):**
 ```bash
 python agents/research_agent/agent.py
 ```
