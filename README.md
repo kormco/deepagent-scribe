@@ -19,6 +19,7 @@ By using this software, you acknowledge these risks and agree to conduct appropr
 
 ### Core Capabilities
 - **LLM-Based LaTeX Generation**: Intelligent document creation with Claude Sonnet 4.5
+- **Pattern Learning System**: Learns from version history to improve future documents
 - **Self-Correcting Compilation**: Automatic error detection and fix generation
 - **Multi-Agent QA Pipeline**: Automated quality assurance with specialized agents
 - **Visual Quality Analysis**: AI-powered PDF layout and typography analysis
@@ -92,6 +93,78 @@ graph TB
     style A2 fill:#ff9,stroke:#333,stroke-width:2px
     style A4 fill:#9f9,stroke:#333,stroke-width:2px
     style OUT_PDF fill:#9f9,stroke:#333,stroke-width:2px
+```
+
+## Pattern Learning System
+
+The system learns from document generation history to continuously improve quality. Instead of hard-coded rules, learned patterns are injected into LLM prompts for intelligent application.
+
+### How It Works
+
+```
+1. Generate Documents → 2. Track Quality Metrics → 3. Mine Patterns
+                                                         ↓
+6. Apply in Next Run ← 5. Inject into Prompts ← 4. Store Learnings
+```
+
+**Pattern Learner** (`tools/pattern_learner.py`):
+- Analyzes version history and quality reports
+- Extracts common LaTeX fixes (e.g., "Fixed multiple consecutive spaces")
+- Tracks quality score trends (average: 89/100, target: 94/100)
+- Identifies recurring recommendations (e.g., "Use booktabs package")
+- Generates `.deepagents/learned_patterns.json` and human-readable reports
+
+**Pattern Injector** (`tools/pattern_injector.py`):
+- Loads learned patterns before document generation
+- Provides agent-specific context (LaTeX Specialist, Visual QA, etc.)
+- Injects patterns into Claude's generation prompts
+- LLM reasons about patterns rather than blindly applying rules
+
+**LLM Integration** (`agents/research_agent/llm_report_generator.py`):
+- Uses `LLMLaTeXGenerator` instead of rule-based templates
+- Receives pattern context in generation prompts
+- Claude applies learnings intelligently based on document context
+- Self-correcting with historical knowledge
+
+### Running Pattern Learning
+
+```bash
+# Mine patterns from version history
+docker-compose run --rm deepagents-printshop python tools/pattern_learner.py
+
+# View learned patterns
+cat .deepagents/learned_patterns.json
+cat .deepagents/pattern_learning_report.md
+
+# Generate document with pattern learning (automatic)
+docker-compose run --rm deepagents-printshop python agents/research_agent/llm_report_generator.py
+```
+
+### Example Learned Patterns
+
+From analyzing 6 documents with 5 version transitions:
+
+**Common LaTeX Fixes** (automatically detected):
+- Fixed multiple consecutive spaces (2x)
+- Fixed section command spacing (2x)
+- Fixed textbf command spacing (2x)
+
+**Recurring Recommendations**:
+- Address 3 formatting warnings for better quality
+- Enhance typography with proper packages and spacing
+- Consider adding packages: booktabs, microtype
+
+**Agent Performance**:
+- `latex_specialist`: 89.0/100 average quality
+- Target for next document: 94.0/100
+
+These patterns are provided to Claude during generation:
+```
+## Historical Patterns - Common LaTeX Issues
+Based on analysis of previous documents, the following issues appear frequently:
+- Fixed multiple consecutive spaces (seen 2x)
+- Fixed section command spacing (seen 2x)
+💡 Consider checking for these issues proactively.
 ```
 
 ## Quick Start
@@ -205,13 +278,17 @@ pdftoppm -h
 deepagents-printshop/
 ├── agents/
 │   ├── research_agent/       # Author Agent: LaTeX document generation
+│   │   ├── llm_report_generator.py   # LLM-based generation with pattern learning
+│   │   └── report_generator.py       # Traditional template-based generator (legacy)
 │   ├── content_editor/       # Grammar, readability, and style improvement
 │   ├── latex_specialist/     # LaTeX formatting and typography optimization
 │   ├── visual_qa/            # Visual PDF quality analysis with LLM feedback
 │   └── qa_orchestrator/      # Multi-agent workflow coordination
 ├── tools/
 │   ├── llm_latex_generator.py    # LLM-based LaTeX generation with self-correction
-│   ├── latex_generator.py        # Traditional LaTeX template generator
+│   ├── pattern_learner.py        # Mines version history for improvement patterns
+│   ├── pattern_injector.py       # Injects learned patterns into agent prompts
+│   ├── latex_generator.py        # Traditional LaTeX template generator (legacy)
 │   ├── pdf_compiler.py           # PDF compilation with error handling
 │   ├── visual_qa.py              # Visual quality analysis with Claude vision
 │   ├── version_manager.py        # File versioning system
@@ -234,6 +311,9 @@ deepagents-printshop/
 │   │   └── version_manifest.json # Complete version tracking
 │   └── output/                   # Generated LaTeX and PDF files
 ├── .deepagents/                  # Persistent agent memory storage
+│   ├── learned_patterns.json    # Pattern learning database
+│   ├── pattern_learning_report.md  # Human-readable pattern insights
+│   └── [agent_name]/memories/   # Per-agent memory files
 ├── Dockerfile
 ├── docker-compose.yml
 └── requirements.txt
@@ -308,27 +388,33 @@ Overall Pipeline:
 
 ## LLM-Based Tools
 
-### LLM LaTeX Generator
-The system uses Claude Sonnet 4.5 for intelligent LaTeX generation:
+### LLM LaTeX Generator with Pattern Learning
+The system uses Claude Sonnet 4.5 for intelligent LaTeX generation with historical learning:
 
 **Features:**
 - Reasons about document structure and formatting
+- **Applies learned patterns from historical documents**
+- **Receives context about common issues and best practices**
 - Handles edge cases dynamically
 - Self-corrects compilation errors
 - Learns from feedback loops
 - Avoids problematic package combinations
 
-**Self-Correction Loop:**
+**Self-Correction Loop with Pattern Learning:**
 ```
-1. Generate LaTeX → 2. Compile
-                      ↓
-                   Error?
-                      ↓
-3. LLM analyzes error ← Yes
+0. Load learned patterns → Inject into LLM context
+   ↓
+1. Generate LaTeX (with pattern awareness) → 2. Compile
+                                               ↓
+                                            Error?
+                                               ↓
+3. LLM analyzes error (with historical context) ← Yes
    ↓
 4. Generate corrected version
    ↓
 5. Retry compilation (max 3 attempts)
+   ↓
+6. Track fixes → Update learned patterns for next run
 ```
 
 ### Visual QA with Claude Vision
