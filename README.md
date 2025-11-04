@@ -53,6 +53,10 @@ graph TB
     A3[LaTeX Specialist<br/>Typography & Formatting<br/>✨]
     A4[Visual QA<br/>PDF Layout Analysis<br/>👁️]
 
+    %% Pattern Learning System
+    LEARN[🧠 Pattern Learner<br/>Mines History]
+    PATTERNS[(📚 Learned Patterns<br/>Common Fixes & Best Practices)]
+
     %% Outputs
     OUT_PDF[📑 Final PDF<br/>Overall Score 90+]
     OUT_VER[📦 Version History<br/>All Stages Tracked]
@@ -63,6 +67,12 @@ graph TB
     IN_MD --> A1
     IN_CSV --> A2
     IN_IMG --> A2
+
+    %% Pattern Learning Input (dotted - happens between runs)
+    PATTERNS -.->|Historical Context| A1
+    PATTERNS -.->|Historical Context| A2
+    PATTERNS -.->|Historical Context| A3
+    PATTERNS -.->|Historical Context| A4
 
     %% Stage 1: Content Review
     A1 -->|v1_content_edited| ORCH
@@ -89,10 +99,17 @@ graph TB
     A4 --> OUT_IMG
     ORCH --> OUT_REP
 
+    %% Pattern Learning Loop (dotted - happens between runs)
+    OUT_VER -.->|Analyze Changes| LEARN
+    OUT_REP -.->|Extract Metrics| LEARN
+    LEARN -.->|Update Patterns| PATTERNS
+
     style ORCH fill:#f9f,stroke:#333,stroke-width:4px
     style A2 fill:#ff9,stroke:#333,stroke-width:2px
     style A4 fill:#9f9,stroke:#333,stroke-width:2px
     style OUT_PDF fill:#9f9,stroke:#333,stroke-width:2px
+    style LEARN fill:#fcf,stroke:#333,stroke-width:3px
+    style PATTERNS fill:#ffc,stroke:#333,stroke-width:3px
 ```
 
 ## Pattern Learning System
