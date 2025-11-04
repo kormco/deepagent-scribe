@@ -357,24 +357,25 @@ python agents/qa_orchestrator/agent.py
 
 **Pipeline Stages:**
 
-1. **Content Review** (Content Editor Agent)
-   - Grammar and spelling correction
-   - Readability improvement
-   - Style consistency
+1. **Content Review** (Content Editor Agent + Claude LLM)
+   - Grammar and spelling correction with AI analysis
+   - Readability improvement using Claude
+   - Style consistency enforcement
+   - Pattern learning integration
    - Quality scoring (0-100)
 
-2. **LaTeX Generation** (Author Agent + LLM Generator)
-   - Markdown to LaTeX conversion
+2. **LaTeX Generation** (Author Agent + Claude LLM)
+   - Markdown to LaTeX conversion with LLM
    - Table generation from CSV
    - Image and figure placement
    - Citation handling
    - Initial PDF compilation
 
-3. **LaTeX Optimization** (LaTeX Specialist Agent)
-   - Typography improvements
-   - Formatting enhancements
+3. **LaTeX Optimization** (LaTeX Specialist Agent + Claude LLM)
+   - Typography improvements with AI reasoning
+   - Formatting enhancements using Claude
    - Structure optimization
-   - Best practices enforcement
+   - Pattern-based best practices
    - Quality scoring (0-100)
 
 4. **Visual QA** (Visual QA Agent + Claude Vision)
