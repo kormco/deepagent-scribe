@@ -47,14 +47,14 @@ graph TB
     ORCH{QA Orchestrator<br/>Quality Gates<br/>🎯}
 
     %% Agent Pipeline
-    A1[Content Editor<br/>Agent<br/>📝]
-    A2[Author Agent<br/>LaTeX Generator<br/>📄]
-    A3[LaTeX Specialist<br/>Agent<br/>✨]
-    A4[Visual QA<br/>Agent<br/>👁️]
+    A1[Content Editor<br/>Grammar & Readability<br/>📝]
+    A2[Author Agent<br/>Markdown→LaTeX Conversion<br/>📄]
+    A3[LaTeX Specialist<br/>Typography & Formatting<br/>✨]
+    A4[Visual QA<br/>PDF Layout Analysis<br/>👁️]
 
     %% Outputs
     OUT_PDF[📑 Final PDF<br/>Overall Score 90+]
-    OUT_VER[📦 Version History]
+    OUT_VER[📦 Version History<br/>All Stages Tracked]
     OUT_IMG[🖼️ Page Screenshots]
     OUT_REP[📊 Quality Reports]
 
@@ -81,7 +81,10 @@ graph TB
     ORCH -->|✅ Overall Score ≥90| OUT_PDF
 
     %% Outputs
-    A2 --> OUT_VER
+    A1 -.-> OUT_VER
+    A2 -.-> OUT_VER
+    A3 -.-> OUT_VER
+    A4 -.-> OUT_VER
     A4 --> OUT_IMG
     ORCH --> OUT_REP
 
