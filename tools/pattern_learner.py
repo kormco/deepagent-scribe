@@ -23,18 +23,20 @@ class PatternLearner:
     - Generate simple recommendations
     """
 
-    def __init__(self, base_dir: str = "artifacts"):
+    def __init__(self, base_dir: str = "artifacts", document_type: str = "research_report"):
         """
         Initialize pattern learner.
 
         Args:
             base_dir: Base artifacts directory
+            document_type: Type of document (e.g., 'research_report', 'article', 'technical_doc')
         """
         self.base_dir = Path(base_dir)
         self.version_dir = self.base_dir / "version_history"
         self.changes_dir = self.version_dir / "changes"
         self.reports_dir = self.base_dir / "agent_reports" / "quality"
-        self.output_dir = Path(".deepagents")
+        self.document_type = document_type
+        self.output_dir = Path(".deepagents") / "memories" / document_type
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     def mine_patterns(self) -> Dict:
@@ -315,6 +317,7 @@ class PatternLearner:
             json.dump(patterns, f, indent=2, ensure_ascii=False)
 
         print(f"\n💾 Patterns saved to: {output_path}")
+        print(f"📁 Document type: {self.document_type}")
         return str(output_path)
 
     def generate_report(self, patterns: Dict) -> str:
@@ -443,10 +446,12 @@ def main():
     print("\n" + "=" * 60)
     print("🧠 DeepAgents PrintShop - Pattern Learner")
     print("=" * 60)
-    print("\nMilestone 1: Mining version history for improvement patterns\n")
+    print("\nMilestone 3: Mining version history for improvement patterns\n")
 
-    # Initialize learner
-    learner = PatternLearner()
+    # Initialize learner with document type
+    document_type = "research_report"  # Default document type
+    learner = PatternLearner(document_type=document_type)
+    print(f"📄 Learning patterns for document type: {document_type}\n")
 
     # Mine patterns
     patterns = learner.mine_patterns()
@@ -462,8 +467,8 @@ def main():
     print("✅ Pattern learning complete!")
     print("=" * 60)
     print("\nNext steps:")
-    print("  1. Review: .deepagents/pattern_learning_report.md")
-    print("  2. Check: .deepagents/learned_patterns.json")
+    print(f"  1. Review: .deepagents/memories/{document_type}/pattern_learning_report.md")
+    print(f"  2. Check: .deepagents/memories/{document_type}/learned_patterns.json")
     print("  3. Use insights to optimize future document generation")
     print()
 

@@ -54,8 +54,8 @@ graph TB
     A4[Visual QA<br/>PDF Layout Analysis<br/>👁️]
 
     %% Pattern Learning System
-    LEARN[🧠 Pattern Learner<br/>Mines History]
-    PATTERNS[(📚 Learned Patterns<br/>Common Fixes & Best Practices)]
+    LEARN[🧠 Pattern Learner<br/>Mines History<br/>By Document Type]
+    PATTERNS[(📚 Learned Patterns<br/>memories/research_report/<br/>Common Fixes & Best Practices)]
 
     %% Outputs
     OUT_PDF[📑 Final PDF<br/>Overall Score 90+]
@@ -114,7 +114,7 @@ graph TB
 
 ## Pattern Learning System
 
-The system learns from document generation history to continuously improve quality. Instead of hard-coded rules, learned patterns are injected into LLM prompts for intelligent application.
+The system learns from document generation history to continuously improve quality. **Patterns are organized by document type** (research_report, article, technical_doc, etc.), allowing type-specific optimizations. Instead of hard-coded rules, learned patterns are injected into LLM prompts for intelligent application.
 
 ### How It Works
 
@@ -146,16 +146,23 @@ The system learns from document generation history to continuously improve quali
 ### Running Pattern Learning
 
 ```bash
-# Mine patterns from version history
+# Mine patterns from version history (for research_report document type)
 docker-compose run --rm deepagents-printshop python tools/pattern_learner.py
 
-# View learned patterns
-cat .deepagents/learned_patterns.json
-cat .deepagents/pattern_learning_report.md
+# View learned patterns (organized by document type)
+cat .deepagents/memories/research_report/learned_patterns.json
+cat .deepagents/memories/research_report/pattern_learning_report.md
 
-# Generate document with pattern learning (automatic)
+# Generate document with pattern learning (automatic - uses research_report patterns)
 docker-compose run --rm deepagents-printshop python agents/research_agent/llm_report_generator.py
 ```
+
+**Document Types:**
+Each document type maintains its own learned patterns. This allows the system to learn type-specific best practices:
+- `research_report`: Academic research papers with sections, citations, tables
+- `article`: Blog posts, articles, shorter documents
+- `technical_doc`: Technical documentation, manuals, specs
+- Custom types can be added by specifying `document_type` parameter
 
 ### Example Learned Patterns
 
@@ -328,9 +335,11 @@ deepagents-printshop/
 │   │   └── version_manifest.json # Complete version tracking
 │   └── output/                   # Generated LaTeX and PDF files
 ├── .deepagents/                  # Persistent agent memory storage
-│   ├── learned_patterns.json    # Pattern learning database
-│   ├── pattern_learning_report.md  # Human-readable pattern insights
-│   └── [agent_name]/memories/   # Per-agent memory files
+│   ├── memories/                 # Pattern learning organized by document type
+│   │   └── research_report/     # Document type-specific patterns
+│   │       ├── learned_patterns.json    # Pattern database for this doc type
+│   │       └── pattern_learning_report.md  # Human-readable insights
+│   └── [agent_name]/memories/   # Per-agent memory files (legacy)
 ├── Dockerfile
 ├── docker-compose.yml
 └── requirements.txt

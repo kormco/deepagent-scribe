@@ -17,14 +17,15 @@ class PatternInjector:
     Provides context-aware prompt augmentation based on historical patterns.
     """
 
-    def __init__(self, patterns_file: str = ".deepagents/learned_patterns.json"):
+    def __init__(self, document_type: str = "research_report"):
         """
         Initialize pattern injector.
 
         Args:
-            patterns_file: Path to learned patterns JSON
+            document_type: Type of document (e.g., 'research_report', 'article', 'technical_doc')
         """
-        self.patterns_file = Path(patterns_file)
+        self.document_type = document_type
+        self.patterns_file = Path(".deepagents") / "memories" / document_type / "learned_patterns.json"
         self.patterns = self._load_patterns()
 
     def _load_patterns(self) -> Dict:
@@ -205,7 +206,7 @@ class PatternInjector:
             Summary string
         """
         if not self.patterns or not self.patterns_file.exists():
-            return "No learned patterns available yet."
+            return f"No learned patterns available yet for document type: {self.document_type}"
 
         metadata = self.patterns.get("metadata", {})
         num_fixes = len(self.patterns.get("common_latex_fixes", {}))
@@ -213,7 +214,7 @@ class PatternInjector:
         num_insights = len(self.patterns.get("insights", []))
 
         return (
-            f"Learned patterns available from {metadata.get('documents_analyzed', 0)} documents:\n"
+            f"Learned patterns for '{self.document_type}' from {metadata.get('documents_analyzed', 0)} documents:\n"
             f"  - {num_fixes} common LaTeX fixes\n"
             f"  - {num_issues} recurring recommendations\n"
             f"  - {num_insights} actionable insights"

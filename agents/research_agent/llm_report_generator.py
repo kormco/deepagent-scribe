@@ -32,12 +32,13 @@ class LLMResearchReportGenerator:
     - Context-aware optimization
     """
 
-    def __init__(self, output_dir: str = "artifacts/output"):
+    def __init__(self, output_dir: str = "artifacts/output", document_type: str = "research_report"):
         """
         Initialize the LLM report generator.
 
         Args:
             output_dir: Directory to save generated files
+            document_type: Type of document (e.g., 'research_report', 'article', 'technical_doc')
         """
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
@@ -45,10 +46,11 @@ class LLMResearchReportGenerator:
         self.content_dir = self.artifacts_dir / "sample_content"
         self.data_dir = self.content_dir / "data"
         self.images_dir = self.content_dir / "images"
+        self.document_type = document_type
 
         # Initialize LLM generator and pattern injector
         self.llm_generator = LLMLaTeXGenerator()
-        self.pattern_injector = PatternInjector()
+        self.pattern_injector = PatternInjector(document_type=document_type)
         self.pdf_compiler = PDFCompiler()
 
     def load_markdown_content(self, filename: str) -> str:
@@ -160,6 +162,8 @@ class LLMResearchReportGenerator:
         """
         print("🚀 LLM-Enhanced LaTeX Generation")
         print("=" * 60)
+        print(f"📄 Document Type: {self.document_type}")
+        print()
 
         # Get pattern context for Author agent
         pattern_context = self.pattern_injector.get_context_for_author()
@@ -168,7 +172,7 @@ class LLMResearchReportGenerator:
             print("✅ Loaded learned patterns from historical documents")
             print(self.pattern_injector.get_summary())
         else:
-            print("ℹ️  No learned patterns available yet")
+            print(f"ℹ️  No learned patterns available yet for '{self.document_type}'")
 
         print()
 
