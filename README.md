@@ -95,11 +95,13 @@ graph LR
 
 ## Quick Start
 
-### Prerequisites
+### Option 1: Docker (Recommended)
+
+**Prerequisites:**
 - Docker Desktop (installed and running)
 - Anthropic API key (for Claude)
 
-### Setup
+**Setup:**
 
 1. **Copy the environment file and add your API keys:**
    ```bash
@@ -117,6 +119,84 @@ graph LR
    ```bash
    python agents/qa_orchestrator/agent.py
    ```
+
+### Option 2: Local Setup (Without Docker)
+
+**Prerequisites:**
+- Python 3.11 or higher
+- TeX Live (for LaTeX/PDF compilation)
+  - **Ubuntu/Debian:** `sudo apt-get install texlive-latex-base texlive-latex-extra texlive-fonts-recommended`
+  - **macOS:** `brew install --cask mactex` or `brew install texlive`
+  - **Windows:** Download and install [MiKTeX](https://miktex.org/download) or [TeX Live](https://tug.org/texlive/)
+- Poppler (for PDF to image conversion in Visual QA)
+  - **Ubuntu/Debian:** `sudo apt-get install poppler-utils`
+  - **macOS:** `brew install poppler`
+  - **Windows:** Download from [Poppler for Windows](https://github.com/oschwartz10612/poppler-windows/releases/) and add to PATH
+- Anthropic API key (for Claude)
+
+**Setup:**
+
+1. **Clone the repository:**
+   ```bash
+   git clone <your-repo-url>
+   cd deepagents-printshop
+   ```
+
+2. **Create and activate a Python virtual environment:**
+   ```bash
+   # Create virtual environment
+   python -m venv venv
+
+   # Activate virtual environment
+   # On Windows:
+   venv\Scripts\activate
+   # On macOS/Linux:
+   source venv/bin/activate
+   ```
+
+3. **Install Python dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Set up environment variables:**
+   ```bash
+   # Copy the example file
+   cp .env.example .env
+
+   # Edit .env and add your API key:
+   # ANTHROPIC_API_KEY=sk-ant-xxxxxxxxxxxxx
+   ```
+
+5. **Run the automated QA pipeline:**
+   ```bash
+   python agents/qa_orchestrator/agent.py
+   ```
+
+**Running Individual Agents Locally:**
+
+```bash
+# Content quality review
+python agents/content_editor/agent.py
+
+# LaTeX generation (Author Agent)
+python agents/research_agent/agent.py
+
+# LaTeX optimization
+python agents/latex_specialist/agent.py
+
+# Visual quality analysis
+python agents/visual_qa/agent.py
+```
+
+**Verify LaTeX Installation:**
+```bash
+# Test LaTeX compiler
+pdflatex --version
+
+# Test PDF to image conversion
+pdftoppm -h
+```
 
 ## Project Structure
 
@@ -260,6 +340,29 @@ Uses multimodal LLM analysis for PDF quality:
 - Header/footer consistency
 - Figure and table quality
 - **Critical:** LaTeX syntax detection (flags unrendered LaTeX commands)
+
+### Example: Visual QA Optimization Results
+
+The Visual QA agent analyzes PDF output and uses LLM-based self-correction to iteratively improve document quality. Below are before and after examples showing the optimization impact:
+
+**Before Visual QA (Initial LaTeX Generation)**
+
+The initial PDF generated from LaTeX source before visual quality analysis and optimization:
+
+![Pre-Visual QA PDF](pre-visual-qa-checkpoint.png)
+
+**After Visual QA & LLM Optimization**
+
+The optimized PDF after the Visual QA agent detected issues and the LLM self-correction loop applied fixes. Notice the improved typography, layout consistency, and professional formatting:
+
+![Post-Visual QA Optimized PDF](pos-visual-qa-llm-optimized.png)
+
+The Visual QA process automatically detects and corrects issues such as:
+- Improper spacing and margins
+- Typography inconsistencies
+- Layout problems in headers/footers
+- Missing or malformed document elements
+- Raw LaTeX syntax appearing in rendered output
 
 ## Version Control System
 

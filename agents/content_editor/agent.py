@@ -2,7 +2,7 @@
 Content Editor Agent - Milestone 1
 
 A specialized agent for improving grammar, readability, and overall content quality.
-Part of the DeepAgent Scribe quality assurance system.
+Part of the DeepAgents PrintShop quality assurance system.
 """
 
 import os

@@ -1,6 +1,6 @@
-# DeepAgent Scribe Setup Guide
+# DeepAgents PrintShop Setup Guide
 
-This guide will help you set up and run the DeepAgent Scribe research agent.
+This guide will help you set up and run the DeepAgents PrintShop research agent.
 
 ## Prerequisites
 
@@ -75,7 +75,7 @@ Generated files will be in `artifacts/output/`:
 ## Project Structure
 
 ```
-deepagent-scribe/
+deepagents-printshop/
 ├── agents/
 │   └── research_agent/
 │       ├── agent.py              # Main agent with DeepAgents integration
@@ -101,7 +101,7 @@ deepagent-scribe/
 
 ## Agent Capabilities
 
-The DeepAgent Scribe can generate LaTeX reports with:
+The DeepAgents PrintShop can generate LaTeX reports with:
 
 1. **Document Structure**
    - Customizable document classes (article, report, book)

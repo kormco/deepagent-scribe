@@ -2,7 +2,7 @@
 Research Report Generator using LaTeX.
 
 This module demonstrates the LaTeX report generation capabilities
-for the DeepAgent Scribe research agent.
+for the DeepAgents PrintShop research agent.
 """
 
 import os
@@ -485,7 +485,7 @@ For wrapped figures with text flow, use the wrapfig environment.
 def main():
     """Main function to demonstrate report generation."""
     print("=" * 60)
-    print("DeepAgent Scribe - LaTeX Research Report Generator")
+    print("DeepAgents PrintShop - LaTeX Research Report Generator")
     print("=" * 60)
     print()
 

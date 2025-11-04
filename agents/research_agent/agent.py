@@ -1,5 +1,5 @@
 """
-DeepAgent Scribe - Research Agent
+DeepAgents PrintShop - Research Agent
 
 A specialized agent for generating LaTeX research reports with persistent memory.
 Integrates with DeepAgents CLI framework.
@@ -180,7 +180,7 @@ class ResearchAgent:
     def show_capabilities(self):
         """Display agent capabilities."""
         print(f"\n{'='*60}")
-        print("DeepAgent Scribe - Research Agent Capabilities")
+        print("DeepAgents PrintShop - Research Agent Capabilities")
         print(f"{'='*60}\n")
 
         capabilities = [
