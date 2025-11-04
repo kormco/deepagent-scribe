@@ -16,7 +16,7 @@ from datetime import datetime
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from .content_reviewer import ContentReviewer
+from agents.content_editor.content_reviewer import ContentReviewer
 
 
 class ContentEditorAgent:
@@ -30,16 +30,18 @@ class ContentEditorAgent:
     4. Content flow and coherence
     """
 
-    def __init__(self, memory_dir: str = ".deepagents/content_editor/memories"):
+    def __init__(self, memory_dir: str = ".deepagents/content_editor/memories", document_type: str = "research_report"):
         """
         Initialize the content editor agent.
 
         Args:
             memory_dir: Directory for storing agent memories
+            document_type: Type of document for pattern learning
         """
         self.memory_dir = Path(memory_dir)
         self.memory_dir.mkdir(parents=True, exist_ok=True)
-        self.content_reviewer = ContentReviewer()
+        self.document_type = document_type
+        self.content_reviewer = ContentReviewer(document_type=document_type)
 
         # Paths
         self.input_dir = Path("artifacts/sample_content")
@@ -161,6 +163,10 @@ class ContentEditorAgent:
         Returns:
             Dict with processing results and overall quality improvements
         """
+        print(f"📄 Document Type: {self.document_type}")
+        print(f"🧠 Pattern Learning: {'Enabled' if self.content_reviewer.pattern_injector else 'Disabled'}")
+        print()
+
         results = {
             "files_processed": [],
             "overall_quality_improvement": 0,

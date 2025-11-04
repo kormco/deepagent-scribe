@@ -6,16 +6,43 @@ Provides content analysis and improvement capabilities using LLM-based review.
 
 import re
 import os
-from typing import Dict, List, Tuple
+import sys
+from pathlib import Path
+from typing import Dict, List, Tuple, Optional
 from anthropic import Anthropic
+
+# Add project root to path for pattern injector
+project_root = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+try:
+    from tools.pattern_injector import PatternInjector
+except ImportError:
+    PatternInjector = None
 
 
 class ContentReviewer:
-    """Content review and improvement tool using Anthropic Claude."""
+    """Content review and improvement tool using Anthropic Claude with pattern learning."""
 
-    def __init__(self):
-        """Initialize the content reviewer with API client."""
+    def __init__(self, document_type: str = "research_report"):
+        """
+        Initialize the content reviewer with API client and pattern learning.
+
+        Args:
+            document_type: Type of document for loading type-specific patterns
+        """
         self.client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+        self.document_type = document_type
+
+        # Initialize pattern injector if available
+        if PatternInjector:
+            try:
+                self.pattern_injector = PatternInjector(document_type=document_type)
+            except Exception as e:
+                print(f"⚠️  Could not load pattern injector: {e}")
+                self.pattern_injector = None
+        else:
+            self.pattern_injector = None
 
     def analyze_readability(self, text: str) -> Dict:
         """
@@ -122,7 +149,7 @@ class ContentReviewer:
 
     def review_text(self, text: str) -> Dict:
         """
-        Review and improve text content.
+        Review and improve text content with pattern learning.
 
         Args:
             text: Original text content
@@ -133,7 +160,14 @@ class ContentReviewer:
         # Analyze original content
         original_metrics = self.analyze_readability(text)
 
-        # Use Claude to review and improve the content
+        # Get pattern context if available
+        pattern_context = ""
+        if self.pattern_injector:
+            pattern_context = self.pattern_injector.get_context_for_content_editor()
+            if pattern_context:
+                print(f"✅ Applying learned patterns for '{self.document_type}' documents")
+
+        # Build prompt with pattern learning context
         prompt = f"""You are a professional editor specializing in academic and technical writing.
 
 Please review and improve the following text for:
@@ -141,7 +175,17 @@ Please review and improve the following text for:
 2. Sentence structure and clarity
 3. Word choice and precision
 4. Flow and readability
-5. Academic writing style
+5. Academic writing style"""
+
+        # Add pattern learning context if available
+        if pattern_context:
+            prompt += f"""
+
+{pattern_context}
+
+IMPORTANT: Apply the historical patterns above to improve this document. Look specifically for the common issues identified in previous documents of this type."""
+
+        prompt += f"""
 
 Original text:
 {text}
@@ -167,7 +211,7 @@ SUMMARY:
 
         try:
             response = self.client.messages.create(
-                model="claude-3-5-sonnet-20241022",
+                model="claude-sonnet-4-20250514",  # Latest Sonnet 4.5 model
                 max_tokens=2000,
                 messages=[{"role": "user", "content": prompt}]
             )
